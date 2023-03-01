@@ -1,9 +1,7 @@
 .Page {
     position: relative;
-    color: white;
     height: 100vh;
     padding: 30px 20px;
-    background-color: #24282c;
 }
 
 .LogoContainer {
@@ -11,17 +9,13 @@
     text-align: right;
 }
 
-.FormContainer  {
-    color: black;
+.FormContainer  {    
     padding: 40px 60px !important;
-    background-color: white;
-    border: 8px outset #6c757db5;
     border-radius: 5px;
 }
 
 .FormTitle {
     margin-bottom: 25px;
-    border: 3px outset #6c757db5; 
     padding: 6px; 
     text-align: center
 }

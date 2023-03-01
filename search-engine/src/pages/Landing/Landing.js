@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
 import Form from '../../components/Form/Form'
+import colors from '../../theme/Colors'
 import './Landing.css'
 
 function Landing() {
@@ -14,9 +15,12 @@ function Landing() {
   const onChangeModel = (event) => setModel(event.target.value)
   const onChangeCluster = (event) => setCluster(event.target.value)
   const onChangeExpansion = (event) => setExpansion(event.target.value)
+  const onSubmitQuery = (event) => {
+    // Send to result page
+  }
   
   return (
-    <div className='Page'>
+    <div className='Page' style={{ backgroundColor: colors.backgroundColor, color: colors.textPrimaryColor }}>
       <Container className='Container'>
         <Row>
           <Col md={4} lg={4} sm={12} className="LogoContainer">  
@@ -26,18 +30,20 @@ function Landing() {
               <h3>RELIGIONS.</h3>
             </div>
           </Col>
-          <Col md={8} lg={8} sm={12} className="FormContainer">
-            <h2 className='FormTitle'>SEARCH PARAMETERS</h2>
-            <Form 
-              search = { search }
-              model = { model }
-              cluster = { cluster }
-              expansion = { expansion }
-              onChangeQuery = { onChangeQuery }
-              onChangeModel = { onChangeModel }
-              onChangeCluster = { onChangeCluster }
-              onChangeExpansion = { onChangeExpansion }
-              />
+          <Col md={8} lg={8} sm={12} 
+            className="FormContainer" 
+            style={{ border: "8px outset " +  colors.borderColor, color: colors.textComponentColor, backgroundColor: colors.backgroundColorComponent }}>
+              <h2 className='FormTitle' style={{ border: "3px outset " + colors.borderColor }}>SEARCH PARAMETERS</h2>
+              <Form 
+                search = { search }
+                model = { model }
+                cluster = { cluster }
+                expansion = { expansion }
+                onChangeQuery = { onChangeQuery }
+                onChangeModel = { onChangeModel }
+                onChangeCluster = { onChangeCluster }
+                onChangeExpansion = { onChangeExpansion }
+                />
           </Col>
         </Row>
       </Container>
