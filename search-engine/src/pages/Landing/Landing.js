@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
+import { useNavigate } from 'react-router'
 
 import Form from '../../components/Form/Form'
 import colors from '../../theme/Colors'
@@ -10,13 +11,14 @@ function Landing() {
   const [ model, setModel ] = useState("pagerank")
   const [ cluster, setCluster ] = useState("none")
   const [ expansion, setExpansion ] = useState("none")
+  const navigate = useNavigate()
 
   const onChangeQuery = (event) => setSearch(event.target.value)
   const onChangeModel = (event) => setModel(event.target.value)
   const onChangeCluster = (event) => setCluster(event.target.value)
   const onChangeExpansion = (event) => setExpansion(event.target.value)
   const onSubmitQuery = (event) => {
-    // Send to result page
+    navigate("/result", { replace: true, state: { search, model, cluster, expansion }})
   }
   
   return (
@@ -43,6 +45,7 @@ function Landing() {
                 onChangeModel = { onChangeModel }
                 onChangeCluster = { onChangeCluster }
                 onChangeExpansion = { onChangeExpansion }
+                onClick = { onSubmitQuery } 
                 />
           </Col>
         </Row>

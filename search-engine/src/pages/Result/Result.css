@@ -1,0 +1,17 @@
+.ResultPage {
+    min-height: 100vh;
+    position: relative;
+    padding: 30px 20px;
+}
+
+.SideContainer {
+    padding: 20px 20px !important;
+    text-align: right;
+}
+
+.ResultContainer  {    
+    padding: 0px !important;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px grey inset;
+    min-height: 90vh;
+}

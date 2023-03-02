@@ -1,7 +1,7 @@
 import Input from 'antd/es/input/Input'
 import React from 'react'
 import RadioGroup from './RadioGroup';
-import Options from './Options';
+import Options from '../../resources/Options';
 import { Button } from 'react-bootstrap';
 import './Form.css'
 import { ConfigProvider } from 'antd';

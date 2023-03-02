@@ -1,7 +1,7 @@
 .Page {
     position: relative;
     height: 100vh;
-    padding: 30px 20px;
+    padding: 20px 10px;
 }
 
 .LogoContainer {
@@ -12,6 +12,7 @@
 .FormContainer  {    
     padding: 40px 60px !important;
     border-radius: 5px;
+    box-shadow: 5px 5px 5px 2px grey inset;
 }
 
 .FormTitle {

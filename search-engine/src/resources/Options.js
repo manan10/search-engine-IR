@@ -15,6 +15,11 @@ const options = {
         { label: 'ASSOCIATION', value: 'association' },
         { label: 'METRIC', value: 'metric' },
         { label: 'SCALAR', value: 'scalar' },
+    ],
+    engines: [
+        { label: 'ALMIGHTY', value: 'almighty' },
+        { label: 'GOOGLE', value: 'google' },
+        { label: 'BING', value: 'bing' },
     ]
 }
 
