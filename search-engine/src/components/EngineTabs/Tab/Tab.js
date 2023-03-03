@@ -1,20 +1,20 @@
 import React from 'react'
 import colors from '../../../theme/Colors'
 
-function Tab({ title }) {
+function Tab({ title, onClickTab, value, engine }) {
     const tabstyle = {
         padding: '15px',
         textAlign: 'center',
-        marginTop: '10px',
-        backgroundColor: 'white',
-        color: 'black',
-        border: '3px outset ' + colors.borderColor,
+        marginTop: '8px',
+        backgroundColor: value !== engine ? 'white' : '#198754',
+        color: value !== engine ? 'black' : 'white',
+        border: '5px outset ' + colors.borderColor,
         cursor: 'pointer',
-        borderRadius: '10px'
+        borderRadius: '6px'
     }
 
     return (
-        <div style= { tabstyle }>
+        <div style= { tabstyle } onClick={ () => onClickTab(value) }>
             <span>{ title }</span>
         </div>
     )

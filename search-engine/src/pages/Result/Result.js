@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router'
 import EngineTabs from '../../components/EngineTabs/EngineTabs'
-import Form from '../../components/Form/Form'
 import SmallForm from '../../components/SmallForm/SmallForm'
 
 import colors from '../../theme/Colors'
@@ -25,9 +24,12 @@ function Result() {
   const onChangeModel = (event) => setModel(event.target.value)
   const onChangeCluster = (event) => setCluster(event.target.value)
   const onChangeExpansion = (event) => setExpansion(event.target.value)
-  const onChangeEngine = (event) => changeEngine(event.target.value)
+  const onChangeEngine = (value) => changeEngine(value)
   const onLogoClick = (event) => {
     navigate('/', { replace: true })
+  }
+  const onSubmitQuery = (event) => {
+    navigate("/result", { replace: true, state: { search, model, cluster, expansion }})
   }
 
   useEffect(() => {
@@ -53,7 +55,17 @@ function Result() {
               { engine === "bing" ? <Bing queryString={ search } /> : null }
           </Col>
           <Col md={2} lg={2} sm={12} className="SideContainer">
-            <SmallForm />
+            <SmallForm 
+              search = { search }
+              model = { model }
+              cluster = { cluster }
+              expansion = { expansion }
+              onChangeQuery = { onChangeQuery }
+              onChangeModel = { onChangeModel }
+              onChangeCluster = { onChangeCluster }
+              onChangeExpansion = { onChangeExpansion }
+              onClick = { onSubmitQuery } 
+            />
           </Col>
         </Row>
       </Container>

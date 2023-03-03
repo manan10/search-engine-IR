@@ -3,9 +3,8 @@ import React from 'react'
 
 function RadioGroupS({ label, options, onChange, value }) {
     const radios = options.map(ele =>  {
-        return <Radio value={ele.value}>{ele.label}</Radio>
+        return <Radio value={ele.value} key={ ele.value }>{ele.label}</Radio>
     })
-    
     
     return (
         <div style={{ marginTop: '20px' }}>

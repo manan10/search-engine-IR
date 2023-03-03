@@ -7,13 +7,8 @@ import RadioGroupS from './RadioGroupS'
 import './SmallForm.css'
 
 function SmallForm({ search, model, cluster, expansion, onChangeQuery, onChangeModel, onChangeCluster, onChangeExpansion, onClick }) {
-    const themeComponents = {
-        
-    }
-
-    return (
-        <div className='Form'>
-            <ConfigProvider theme = {{ components: { Radio: {
+    const themeComponents = { 
+        Radio: {
             colorText: 'white',
             fontSize: '14px'
         },
@@ -21,7 +16,13 @@ function SmallForm({ search, model, cluster, expansion, onChangeQuery, onChangeM
             colorBorder: colors.primaryColor,
             colorPrimaryHover: colors.primaryColor,
             borderRadius: '0px !mportant'
-        } }}}>
+        } 
+    }
+
+
+    return (
+        <div className='Form'>
+            <ConfigProvider theme = {{ components: themeComponents }}>
                 <div style={{ textAlign:  'left' }}>
                     <RadioGroupS label="Query Model" options={ Options.model } onChange={ onChangeModel } value={ model } />
                     <RadioGroupS label="Clustering method" options={ Options.cluster } onChange={ onChangeCluster } value={ cluster } />
