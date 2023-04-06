@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router'
-import EngineTabs from '../../components/EngineTabs/EngineTabs'
-import SmallForm from '../../components/SmallForm/SmallForm'
 
+import EngineTabs from '../../components/EngineTabs/EngineTabs'
+import SmallForm from '../../components/Forms/SmallForm'
 import colors from '../../theme/Colors'
 import Almighty from './Almighty/Almighty'
 import Bing from './Bing/Bing'
 import Google from './Google/Google'
-import './Result.css'
+import classes from './Result.module.css'
 
 function Result() {
   const location = useLocation()
@@ -41,20 +41,20 @@ function Result() {
   }, [location.state])
   
   return (
-    <div className='ResultPage' style={{ backgroundColor: colors.backgroundColor, color: colors.primaryColor }}>
-      <Container className='Container' fluid>
+    <div className={classes.ResultPage} style={{ backgroundColor: colors.backgroundColor, color: colors.primaryColor }}>
+      <Container className={classes.Container} fluid>
         <Row>
-          <Col md={2} lg={2} sm={12} className="SideContainer">
+          <Col md={2} lg={2} sm={12} className={classes.SideContainer}>
             <h4 style={{ color: 'white', cursor: 'pointer' }} onClick={ onLogoClick }>THE ALMIGHTY SEARCH ENGINE</h4>
             <EngineTabs onChangeEngine={ onChangeEngine } engine = { engine } />
           </Col>
-          <Col md={8} lg={8} sm={12} className="ResultContainer" 
+          <Col md={8} lg={8} sm={12} className={classes.ResultContainer} 
             style={{ border: "8px outset " +  colors.borderColor, color: colors.textComponentColor, backgroundColor: colors.backgroundColorComponent }}>
               { engine === "almighty" ? <Almighty /> : null }   
               { engine === "google" ? <Google queryString={ search } /> : null }
               { engine === "bing" ? <Bing queryString={ search } /> : null }
           </Col>
-          <Col md={2} lg={2} sm={12} className="SideContainer">
+          <Col md={2} lg={2} sm={12} className={classes.SideContainer}>
             <SmallForm 
               search = { search }
               model = { model }

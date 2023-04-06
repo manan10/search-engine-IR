@@ -1,39 +1,44 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router'
+import { Image } from 'antd'
 
-import Form from '../../components/Form/Form'
+import Form from '../../components/Forms/Form'
 import colors from '../../theme/Colors'
-import './Landing.css'
+import Logo from './../../resources/logo.jpg'
+import useInput from '../../hooks/use-input'
+import classes from './Landing.module.css'
 
 function Landing() {
-  const [ search, setSearch ] = useState("")
-  const [ model, setModel ] = useState("pagerank")
-  const [ cluster, setCluster ] = useState("none")
-  const [ expansion, setExpansion ] = useState("none")
+  const { value: search, onChange: setSearch }  = useInput('')
+  const { value: model, onChange: setModel }  = useInput('pagerank')
+  const { value: cluster, onChange: setCluster }  = useInput('none')
+  const { value: expansion, onChange: setExpansion }  = useInput('none')
   const navigate = useNavigate()
 
-  const onChangeQuery = (event) => setSearch(event.target.value)
-  const onChangeModel = (event) => setModel(event.target.value)
-  const onChangeCluster = (event) => setCluster(event.target.value)
-  const onChangeExpansion = (event) => setExpansion(event.target.value)
   const onSubmitQuery = (event) => {
     navigate("/result", { replace: true, state: { search, model, cluster, expansion }})
   }
   
   return (
-    <div className='Page' style={{ backgroundColor: colors.backgroundColor, color: colors.textPrimaryColor }}>
-      <Container className='Container'>
+    <div className={classes.Page} style={{ backgroundColor: colors.backgroundColor, color: colors.textPrimaryColor }}>
+      <Container className={classes.Container}>
         <Row>
-          <Col md={4} lg={4} sm={12} className="LogoContainer">  
+          <Col md={4} lg={4} sm={12} className={classes.LogoContainer}> 
+            <Image 
+              src={ Logo } 
+              alt="Almighty Logo" 
+              width={ 150 } 
+              preview={false} 
+              style={{ borderRadius: '8px', border: '5px solid ' + colors.borderColor }}/>
             <h1>THE ALMIGHTY SEARCH ENGINE</h1>
-            <div style={{ marginTop: '80px' }}>
+            <div style={{ marginTop: '60px' }}>
               <h5>A search engine built around </h5>
               <h3>RELIGIONS.</h3>
             </div>
           </Col>
           <Col md={8} lg={8} sm={12} 
-            className="FormContainer" 
+            className={classes.FormContainer} 
             style={{ border: "8px outset " +  colors.borderColor, color: colors.textComponentColor, backgroundColor: colors.backgroundColorComponent }}>
               <h2 className='FormTitle' style={{ border: "3px outset " + colors.borderColor }}>SEARCH PARAMETERS</h2>
               <Form 
@@ -41,10 +46,10 @@ function Landing() {
                 model = { model }
                 cluster = { cluster }
                 expansion = { expansion }
-                onChangeQuery = { onChangeQuery }
-                onChangeModel = { onChangeModel }
-                onChangeCluster = { onChangeCluster }
-                onChangeExpansion = { onChangeExpansion }
+                onChangeQuery = { setSearch }
+                onChangeModel = { setModel }
+                onChangeCluster = { setCluster }
+                onChangeExpansion = { setExpansion }
                 onClick = { onSubmitQuery } 
                 />
           </Col>

@@ -5,8 +5,12 @@
 }
 
 .LogoContainer {
-    padding: 100px 40px !important;
+    padding: 40px !important;
     text-align: right;
+}
+
+.LogoContainer h1 {
+    margin-top: 10px;
 }
 
 .FormContainer  {    

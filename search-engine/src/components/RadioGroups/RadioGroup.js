@@ -1,6 +1,5 @@
 import React from 'react'
 import { Radio } from 'antd'
-import './Form.css'
 
 function RadioGroup({ label, options, value, onChange }) {
   return (
