@@ -1,14 +1,15 @@
 import React from 'react'
-
+import Iframe from '../../../components/Iframe/Iframe'
 
 function Bing({ queryString }) {
     return (
-        <iframe 
-            title='google'
-            id="google" 
-            src={ "https://www.bing.com/search?q=" + queryString } 
+        <Iframe 
+            title='bing'
+            id="bing" 
+            src="https://www.bing.com/search?q="
+            queryString={queryString} 
             width="100%"
-            height="100%"></iframe>
+            height="100%"></Iframe>
       )
 }
 

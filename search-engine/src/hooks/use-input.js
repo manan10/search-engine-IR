@@ -1,12 +1,17 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
-const useInput = (defaultValue = '') => {
+const useInput = (defaultValue = '', validate = () => {}) => {
   const [value, setValue] = useState(defaultValue)
-  const valueChangedHandler = (event) => {
+  const isValid = validate(value)
+  const valueChangedHandler = useCallback((event) => {
     setValue(event.target.value)
-  }
+  }, [])
 
-  return { value: value, onChange: valueChangedHandler }
+  const changeVal = useCallback((val) => {
+    setValue(val)
+  }, [])
+
+  return { value: value, onChange: valueChangedHandler, setVal: changeVal, isValid: isValid }
 }
 
 export default useInput

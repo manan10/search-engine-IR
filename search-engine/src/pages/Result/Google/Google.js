@@ -1,13 +1,14 @@
 import React from 'react'
+import Iframe from '../../../components/Iframe/Iframe'
 
 function Google({ queryString }) {
   return (
-    <iframe 
+    <Iframe 
         title='google'
         id="google" 
-        src={"https://www.google.com/search?igu=1&source=hp&ei=lheWXriYJ4PktQXN-LPgDA&q=" + queryString} 
-        width="100%"
-        height="100%"></iframe>
+        src="https://www.google.com/search?igu=1&source=hp&ei=lheWXriYJ4PktQXN-LPgDA&q="
+        queryString={queryString} 
+        ></Iframe>
   )
 }
 

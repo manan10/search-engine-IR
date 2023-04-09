@@ -8,7 +8,7 @@ function EngineTabs({ onChangeEngine, engine }) {
     { title: "Bing SE", value: "bing" } 
   ]
   return (
-    <div style={{ marginTop: '80px' }}>
+    <div>
         {
           tabs.map(ele => {
             return (

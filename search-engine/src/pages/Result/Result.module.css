@@ -4,6 +4,25 @@
     padding: 25px 20px;
 }
 
+.TopContainer {
+    display: flex;
+    padding: 20px 10px;
+}
+
+.Input {
+    margin-left: 22px;
+    border-radius: 5px;
+    height: 50px;
+}
+
+.Button {
+    text-align: left;
+    margin-left: 5px;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+}
+
 .SideContainer {
     padding: 20px 20px !important;
     text-align: right;
