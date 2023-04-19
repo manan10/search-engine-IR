@@ -1,0 +1,18 @@
+.ResultItem {
+    margin-bottom: 20px;
+}
+
+.Link {
+    color: #36a16f;
+    text-decoration: none;
+}
+
+.Link  h5:hover {
+    color: #36a16f;
+    text-decoration: underline;
+}
+
+.Link:hover {
+    color: #36a16f;
+}
+

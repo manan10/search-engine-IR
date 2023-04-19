@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Col, Container, Row } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router'
@@ -16,33 +16,32 @@ import useInput from '../../hooks/use-input'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import classes from './Result.module.css'
 
+
 function Result() {
   const location = useLocation()
   const navigate = useNavigate()
+  const pageRef = useRef(null)
 
-  // const [ search, setSearch ] = useState("")
-  // const [ model, setModel ] = useState("pagerank")
-  // const [ cluster, setCluster ] = useState("none")
-  // const [ expansion, setExpansion ] = useState("none")
-
+  const [ results, setResults ] = useState([])
   const [ engine, changeEngine ] = useState("almighty")
   const [ isModalOpen, setIsModalOpen ] = useState(false)
+  const [ query, setQuery ] = useState("")
 
   const { value: search, onChange: setSearch, setVal: setValSearch }  = useInput('', (val) => val !== '')
   const { value: model, onChange: setModel, setVal: setValModel }  = useInput('pagerank')
   const { value: cluster, onChange: setCluster, setVal: setValCluster }  = useInput('none')
   const { value: expansion, onChange: setExpansion, setVal: setValExpansion }  = useInput('none')
+  
 
-  // const onChangeQuery = (event) => setSearch(event.target.value)
-  // const onChangeModel = (event) => setModel(event.target.value)
-  // const onChangeCluster = (event) => setCluster(event.target.value)
-  // const onChangeExpansion = (event) => setExpansion(event.target.value)
   const onChangeEngine = (value) => changeEngine(value)
   const onLogoClick = () => navigate('/', { replace: true })
   const onSettingsClicked = (event) => setIsModalOpen(true)
+  const gotoTop = () => pageRef.current.scrollIntoView()
+
   const onSubmitQuery = (event) => {
-    // navigate("/result", { replace: true, state: { search, model, cluster, expansion }})
+    // send request here
   }
+
 
   const themeComponents = { 
       Radio: {
@@ -62,6 +61,26 @@ function Result() {
     setValModel(model)
     setValCluster(cluster)
     setValExpansion(expansion)
+
+    // Dummy
+    const dummy = [
+      { id: 'Google1', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
+      { id: 'Google2', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
+      { id: 'Google3', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
+      { id: 'Google4', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
+      { id: 'Google5', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
+      { id: 'Google6', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
+      { id: 'Spotify1', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Spotify2', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Spotify3', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Spotify4', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Spotify5', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Spotify6', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Spotify7', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+    ]
+    setResults(dummy)
+    setQuery(search)
+    
     // eslint-disable-next-line
   }, [location.state])  
   
@@ -76,11 +95,12 @@ function Result() {
               setModel={setModel} setCluster={setCluster} setExpansion={setExpansion} />
             , document.getElementById("modal")) 
         }
+
         <Container className={classes.Container} fluid>
           <div className={classes.TopContainer}>
-              <Logo width={ 60 } style={{ borderRadius: '50px', border: '2px solid ' + colors.borderColor, cursor: 'pointer' }} onClick={ onLogoClick }/>
-              <h5 style={{ color: 'white', marginLeft: '10px', cursor: 'pointer'}} onClick={onLogoClick}>THE ALMIGHTY</h5>
-              <Input placeholder='Search Here' value={ search } onChange={ setSearch } className={classes.Input} size='large' />
+              <Logo width={ 60 } className={ classes.Image } style={{ border: '2px solid ' + colors.borderColor }} onClick={ onLogoClick }/>
+              <h5 className={classes.Title} onClick={onLogoClick}>THE ALMIGHTY</h5>
+              <Input placeholder='Search Here' value={ search } onChange={ setSearch } className={classes.Input} size='large' style={{ border: '3px solid ' + colors.borderColor }} />
               <Tooltip title="Search" color='#198754' placement='topRight'>
                 <Button variant='success' onClick={ onSubmitQuery } className={classes.Button} size='small'><FiSearch /></Button>
               </Tooltip>
@@ -93,9 +113,9 @@ function Result() {
             <Col md={2} lg={2} sm={12} className={classes.SideContainer}>
               <EngineTabs onChangeEngine={ onChangeEngine } engine = { engine } />
             </Col>
-            <Col md={10} lg={10} sm={12} className={classes.ResultContainer} 
-              style={{ border: "8px outset " +  colors.borderColor, color: colors.textComponentColor, backgroundColor: colors.backgroundColorComponent }}>
-                { engine === "almighty" ? <Almighty /> : null }   
+            <Col ref={ pageRef } md={10} lg={10} sm={12} className={ engine === 'almighty' ? classes.Almighty : classes.ResultContainer} 
+              style={{ border: "5px solid " +  colors.borderColor }}>
+                { engine === "almighty" ? <Almighty results = { results }  gotoTop = { gotoTop } query={ query }/> : null }   
                 { engine === "google" ? <Google queryString={ search } /> : null }
                 { engine === "bing" ? <Bing queryString={ search } /> : null }
             </Col>

@@ -28,3 +28,21 @@
     padding: 6px; 
     text-align: center
 }
+
+.Image {
+    -webkit-animation:spin 30s ease-in-out infinite;
+    -moz-animation:spin 30s ease-in-out infinite;
+    animation:spin 30s ease-in-out infinite;
+}
+@-moz-keyframes spin { 
+    50% { -moz-transform: rotate(360deg); } 
+}
+@-webkit-keyframes spin { 
+    50% { -webkit-transform: rotate(360deg); } 
+}
+@keyframes spin { 
+    50% { 
+        -webkit-transform: rotate(360deg); 
+        transform:rotate(360deg); 
+    } 
+}

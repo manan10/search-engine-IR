@@ -17,7 +17,7 @@ function SettingsModal({ isModelOpen, setIsModalOpen, model, cluster, expansion,
             okButtonProps={{ style: { backgroundColor: '#24282c' } }}
         >
             <div style={{ textAlign:  'left' }}>
-                <RadioGroup label="Query Model" options={ Options.model } onChange={ setModel } value={ model } />
+                <RadioGroup label="Relevance Model" options={ Options.model } onChange={ setModel } value={ model } />
                 <RadioGroup label="Clustering method" options={ Options.cluster } onChange={ setCluster } value={ cluster } />
                 <RadioGroup label="Expansion method" options={ Options.expansion } onChange={ setExpansion } value = { expansion } />
             </div>

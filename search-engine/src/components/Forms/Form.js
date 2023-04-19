@@ -29,16 +29,12 @@ function Form({ onSubmit, withInput }) {
     const onSubmitQuery = (event) => {
         onSubmit({search, model, cluster, expansion}, isValid)
     }
-
-    const onSaveSettings = () => {
-        return {model, cluster, expansion}
-    }
     
     return (
         <div className={ classes.Form }>
             <ConfigProvider theme = {{ components: themeComponents }}>
                 <div style={{ textAlign:  'left' }}>
-                    <RadioGroup label="Query Model" options={ Options.model } onChange={ setModel } value={ model } />
+                    <RadioGroup label="Relevance Model" options={ Options.model } onChange={ setModel } value={ model } />
                     <RadioGroup label="Clustering method" options={ Options.cluster } onChange={ setCluster } value={ cluster } />
                     <RadioGroup label="Expansion method" options={ Options.expansion } onChange={ setExpansion } value={ expansion } />
                 </div>

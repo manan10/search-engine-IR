@@ -26,7 +26,7 @@ function Landing() {
         <Container className={classes.Container}>
           <Row>
             <Col md={4} lg={4} sm={12} className={classes.LogoContainer}> 
-              <Logo width={150} style={{ borderRadius: '12px', border: '5px solid ' + colors.borderColor }} />
+              <Logo className={ classes.Image } width={150} style={{ borderRadius: '150px', height: '150px', border: '2px solid ' + colors.borderColor }} />
               <h1 className={classes.Title} style={{ fontSize: '45px' }}>THE ALMIGHTY SEARCH ENGINE</h1>
               <div style={{ marginTop: '20px' }}>
                 <h6>A search engine built around </h6>
