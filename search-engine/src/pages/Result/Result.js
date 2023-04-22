@@ -15,6 +15,8 @@ import Logo from '../../components/Logo/Logo'
 import useInput from '../../hooks/use-input'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import classes from './Result.module.css'
+import axios from 'axios'
+import { api } from '../../resources/api'
 
 
 function Result() {
@@ -23,6 +25,8 @@ function Result() {
   const pageRef = useRef(null)
 
   const [ results, setResults ] = useState([])
+  const [ isLoading, setIsLoading ] = useState(false)
+  const [ error, setError ] = useState(null)
   const [ engine, changeEngine ] = useState("almighty")
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const [ query, setQuery ] = useState("")
@@ -32,16 +36,23 @@ function Result() {
   const { value: cluster, onChange: setCluster, setVal: setValCluster }  = useInput('none')
   const { value: expansion, onChange: setExpansion, setVal: setValExpansion }  = useInput('none')
   
-
   const onChangeEngine = (value) => changeEngine(value)
   const onLogoClick = () => navigate('/', { replace: true })
   const onSettingsClicked = (event) => setIsModalOpen(true)
   const gotoTop = () => pageRef.current.scrollIntoView()
 
-  const onSubmitQuery = (event) => {
-    // send request here
+  const onSubmitQuery = async () => {
+    setError(null)
+    setIsLoading(true)
+    try {
+      const response = await axios.get(api.baseURL + 'users')
+      console.log(response.data)
+      // setResults(response.data)
+    } catch(err) {
+      setError('Something went Wrong')
+    } 
+    setIsLoading(false)
   }
-
 
   const themeComponents = { 
       Radio: {
@@ -64,23 +75,23 @@ function Result() {
 
     // Dummy
     const dummy = [
-      { id: 'Google1', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
-      { id: 'Google2', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
-      { id: 'Google3', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
-      { id: 'Google4', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
-      { id: 'Google5', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
-      { id: 'Google6', name: 'Google', src: 'https://www.google.com', desc: 'Google Search Engine' },
-      { id: 'Spotify1', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
-      { id: 'Spotify2', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
-      { id: 'Spotify3', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
-      { id: 'Spotify4', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
-      { id: 'Spotify5', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
-      { id: 'Spotify6', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
-      { id: 'Spotify7', name: 'Spotify', src: 'https://www.spotify.com', desc: 'Spotify Music Player' },
+      { id: 'Google1', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
+      { id: 'Google2', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
+      { id: 'Google3', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
+      { id: 'Google4', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
+      { id: 'Google5', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
+      { id: 'Google6', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
+      { id: 'Spotify1', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
+      { id: 'Spotify2', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
+      { id: 'Spotify3', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
+      { id: 'Spotify4', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
+      { id: 'Spotify5', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
+      { id: 'Spotify6', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
+      { id: 'Spotify7', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
     ]
     setResults(dummy)
     setQuery(search)
-    
+    // onSubmitQuery()
     // eslint-disable-next-line
   }, [location.state])  
   
@@ -115,7 +126,14 @@ function Result() {
             </Col>
             <Col ref={ pageRef } md={10} lg={10} sm={12} className={ engine === 'almighty' ? classes.Almighty : classes.ResultContainer} 
               style={{ border: "5px solid " +  colors.borderColor }}>
-                { engine === "almighty" ? <Almighty results = { results }  gotoTop = { gotoTop } query={ query }/> : null }   
+                { engine === "almighty" ? 
+                    results && 
+                    <Almighty results = { results }  
+                              gotoTop = { gotoTop }
+                              query={ query }
+                              isLoading={ isLoading }
+                              error={ error } /> 
+                : null }   
                 { engine === "google" ? <Google queryString={ search } /> : null }
                 { engine === "bing" ? <Bing queryString={ search } /> : null }
             </Col>

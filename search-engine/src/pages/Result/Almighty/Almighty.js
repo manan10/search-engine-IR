@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import ReactPaginate from 'react-paginate';
+import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
+import List from './List/List';
+import Pagination from './Pagination/Pagination';
 
-import './Pagination.css'
-import List from './List';
-
-
-function Almighty({ results, gotoTop, query }) {
+function Almighty({ results, gotoTop, query, isLoading, error }) {
   const resultsPerPage = 10;
   const [resultOffset, setResultOffset] = useState(0);
   const endOffset = resultOffset + resultsPerPage;
@@ -18,29 +16,24 @@ function Almighty({ results, gotoTop, query }) {
       gotoTop()
   };
 
-return (
-  <>
+  const content = (
+    <>
       <p className='text-muted' style={{ fontSize: '14px'}}> {`Results for `} <b>{ query }</b></p>
       <p className='text-muted' style={{ marginTop: '-18px', fontSize: '14px' }}> {`${results.length} result(s).`} </p>
-      <List currentResults={currentResults} />
-      <div style={{ textAlign: 'center', marginTop: '70px' }}>
-          <ReactPaginate
-              breakLabel="..."
-              nextLabel="Next >"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={5}
-              pageCount={pageCount}
-              previousLabel="< Previous"
-              renderOnZeroPageCount={null}
-              containerClassName={"pagination"}
-              previousLinkClassName={"pagination__link"}
-              nextLinkClassName={"pagination__link"}
-              pageLinkClassName={"pagination__link"}
-              disabledClassName={"pagination__link--disabled"}
-              activeClassName={"pagination__link--active"} />
+      <List currentResults={currentResults} error={ error } />
+      <div style={{ marginTop: '40px' }}>
+          <Pagination handlePageClick={ handlePageClick } pageCount={ pageCount } />
       </div>
-  </>
-)  
+    </>
+  )
+
+  return (
+    <>
+      {
+        isLoading ? <LoadingSpinner /> : content
+      }
+    </>
+  )  
 }
 
 export default Almighty
