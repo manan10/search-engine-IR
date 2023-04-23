@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { ConfigProvider, Input, Tooltip } from 'antd'
 import { Button } from 'react-bootstrap'
 import { FiSettings, FiSearch } from 'react-icons/fi'
+import axios from 'axios'
 
 import EngineTabs from '../../components/EngineTabs/EngineTabs'
 import colors from '../../theme/Colors'
@@ -14,15 +15,15 @@ import Google from './Google/Google'
 import Logo from '../../components/Logo/Logo'
 import useInput from '../../hooks/use-input'
 import SettingsModal from '../../components/Modal/SettingsModal'
-import classes from './Result.module.css'
-import axios from 'axios'
 import { api } from '../../resources/api'
-
+import useNotify from '../../hooks/use-notify'
+import classes from './Result.module.css'
 
 function Result() {
   const location = useLocation()
   const navigate = useNavigate()
   const pageRef = useRef(null)
+  const { contextHolder, openNotification } = useNotify()
 
   const [ results, setResults ] = useState([])
   const [ isLoading, setIsLoading ] = useState(false)
@@ -31,7 +32,7 @@ function Result() {
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const [ query, setQuery ] = useState("")
 
-  const { value: search, onChange: setSearch, setVal: setValSearch }  = useInput('', (val) => val !== '')
+  const { value: search, onChange: setSearch, setVal: setValSearch, isValid }  = useInput('', (val) => val !== '')
   const { value: model, onChange: setModel, setVal: setValModel }  = useInput('pagerank')
   const { value: cluster, onChange: setCluster, setVal: setValCluster }  = useInput('none')
   const { value: expansion, onChange: setExpansion, setVal: setValExpansion }  = useInput('none')
@@ -41,17 +42,27 @@ function Result() {
   const onSettingsClicked = (event) => setIsModalOpen(true)
   const gotoTop = () => pageRef.current.scrollIntoView()
 
-  const onSubmitQuery = async () => {
-    setError(null)
-    setIsLoading(true)
-    try {
-      const response = await axios.get(api.baseURL + 'users')
-      console.log(response.data)
-      // setResults(response.data)
-    } catch(err) {
-      setError('Something went Wrong')
-    } 
-    setIsLoading(false)
+  const onSubmitQuery = async (valid) => {
+    if (valid) {
+      setError(null)
+      setIsLoading(true)
+      try {
+        const queryParams = {
+          query: search,
+          relevance_model: model,
+          clustering_method: cluster,
+          expansion_method: expansion
+        }
+        const response = await axios.get(api.baseURL + 'indexer', { params: queryParams })
+        setResults(response.data.results)
+        setQuery(response.data.query)
+      } catch(err) {
+        setError('Something went wrong')
+      } 
+      setIsLoading(false)
+    } else {
+      openNotification('error', 'Try Again', 'Empty search query. Please enter a valid search query.')
+    }
   }
 
   const themeComponents = { 
@@ -72,31 +83,14 @@ function Result() {
     setValModel(model)
     setValCluster(cluster)
     setValExpansion(expansion)
-
-    // Dummy
-    const dummy = [
-      { id: 'Google1', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
-      { id: 'Google2', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
-      { id: 'Google3', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
-      { id: 'Google4', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
-      { id: 'Google5', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
-      { id: 'Google6', title: 'Google', url: 'https://www.google.com', content: 'Google Search Engine' },
-      { id: 'Spotify1', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-      { id: 'Spotify2', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-      { id: 'Spotify3', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-      { id: 'Spotify4', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-      { id: 'Spotify5', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-      { id: 'Spotify6', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-      { id: 'Spotify7', title: 'Spotify', url: 'https://www.spotify.com', content: 'Spotify Music Player' },
-    ]
-    setResults(dummy)
     setQuery(search)
-    // onSubmitQuery()
+    onSubmitQuery(true)
     // eslint-disable-next-line
   }, [location.state])  
   
   return (
     <div className={classes.ResultPage} style={{ backgroundColor: colors.backgroundColor, color: colors.primaryColor }}>
+      { contextHolder }
       <ConfigProvider theme = {{ components: themeComponents }}>                
         { 
           isModalOpen && createPortal(
@@ -113,7 +107,7 @@ function Result() {
               <h5 className={classes.Title} onClick={onLogoClick}>THE ALMIGHTY</h5>
               <Input placeholder='Search Here' value={ search } onChange={ setSearch } className={classes.Input} size='large' style={{ border: '3px solid ' + colors.borderColor }} />
               <Tooltip title="Search" color='#198754' placement='topRight'>
-                <Button variant='success' onClick={ onSubmitQuery } className={classes.Button} size='small'><FiSearch /></Button>
+                <Button variant='success' onClick={ () => onSubmitQuery(isValid) } className={classes.Button} size='small'><FiSearch /></Button>
               </Tooltip>
               <Tooltip title="Change search parameters" color='#DC3545' placement='topRight'>
                 <Button variant='danger' onClick={ onSettingsClicked } className={classes.Button} size='small'><FiSettings /></Button>
@@ -129,9 +123,9 @@ function Result() {
                 { engine === "almighty" ? 
                     results && 
                     <Almighty results = { results }  
-                              gotoTop = { gotoTop }
                               query={ query }
                               isLoading={ isLoading }
+                              gotoTop = { gotoTop }
                               error={ error } /> 
                 : null }   
                 { engine === "google" ? <Google queryString={ search } /> : null }

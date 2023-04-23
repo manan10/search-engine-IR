@@ -1,0 +1,13 @@
+Start SOLR
+-------------
+
+
+Start Indexer
+-------------
+python indexer.py
+
+
+Start React App
+---------------
+npm install - 1st time
+npm start - to run locally

@@ -27,7 +27,7 @@ function List({ currentResults, error }) {
             })
         }
         {
-            currentResults.length === 0 &&  (
+            currentResults.length === 0 && !error &&  (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80%' }}>
                     <p className='text-muted'>No results found. Try again.</p>
                 </div>

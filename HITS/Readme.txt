@@ -1,0 +1,1 @@
+Add precomputed scores for hits algo in the folder and update hits algo file if necessary.

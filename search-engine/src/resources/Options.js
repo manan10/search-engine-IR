@@ -7,7 +7,7 @@ const options = {
     cluster: [
         { label: 'NONE', value: 'none' },
         { label: 'FLAT', value: 'flat' },
-        { label: 'HIERARCHICAL', value: 'heirarchy' },
+        { label: 'HIERARCHICAL', value: 'hierarchical' },
     ],
 
     expansion: [
