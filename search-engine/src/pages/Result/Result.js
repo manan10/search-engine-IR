@@ -42,13 +42,13 @@ function Result() {
   const onSettingsClicked = (event) => setIsModalOpen(true)
   const gotoTop = () => pageRef.current.scrollIntoView()
 
-  const onSubmitQuery = async (valid) => {
+  const onSubmitQuery = async (valid, query = null) => {
     if (valid) {
       setError(null)
       setIsLoading(true)
       try {
         const queryParams = {
-          query: search,
+          query: query ? query : search,
           relevance_model: model,
           clustering_method: cluster,
           expansion_method: expansion
@@ -84,7 +84,7 @@ function Result() {
     setValCluster(cluster)
     setValExpansion(expansion)
     setQuery(search)
-    onSubmitQuery(true)
+    onSubmitQuery(true, search)
     // eslint-disable-next-line
   }, [location.state])  
   

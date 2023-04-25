@@ -20,7 +20,7 @@ function List({ currentResults, error }) {
                             <h5> { result.title } </h5>
                             <p className='text-muted' style={{ marginTop: '-10px', fontSize: '15px' }}> {  result.url } </p>
                         </a>
-                        <p style={{ marginTop: '-15px', fontSize: '14px' }}> { result.content } </p>
+                        <p style={{ marginTop: '-15px', fontSize: '14px' }}> { result.meta_info } </p>
                         <hr />
                     </div>
                 )

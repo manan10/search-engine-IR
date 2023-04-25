@@ -1,32 +1,12 @@
 
 import re
-import collections
-import heapq
-
-import numpy as np
 from nltk.corpus import stopwords
-from nltk import PorterStemmer
-import pysolr
-import pprint
-
-# def get_results_from_solr(query, solr):
-#     results = solr.search('text: "'+query+'"', search_handler="/select", **{
-#         "wt": "json",
-#         # "rows": 10
-#         "rows": 50
-#     })
-#     return results
 
 # returns a list of tokens
 def tokenize_doc(doc_text, stop_words):
-    # doc_text = doc_text.replace('\n', ' ')
-    # doc_text = " ".join(re.findall('[a-zA-Z]+', doc_text))
-    # tokens = doc_text.split(' ')
     tokens = []
     text = doc_text
     text = ' '.join(text)
-    # print('8888888888888888888888888888888888**************************************')
-    # print(type(text))
     text = re.sub(r'[\n]', ' ', text)
     text = re.sub(r'[,-]', ' ', text)
     text = re.sub(r'[^\w\s]', '', text)
@@ -56,30 +36,18 @@ def build_association(id_token_map, vocab, query):
 	
 def association_main(query, solr_results):
     stop_words = set(stopwords.words('english'))
-    #query = 'olympic medal'
-    # solr = pysolr.Solr('http://localhost:8983/solr/nutch/', always_commit=True, timeout=10)
-    # results = get_results_from_solr(query, solr)
     tokens = []
-    token_counts = {}
     tokens_map = {}
-    # tokens_map = collections.OrderedDict()
-    document_ids = []
-    # print(solr_results[0])
     for result in solr_results:
         tokens_this_document = tokenize_doc(result['content'], stop_words)
         print('******************************************///////////////////////////')
         tokens_map[result['digest'][0]] = tokens_this_document
         tokens.append(tokens_this_document)
-    # print(tokens_map)
 
     vocab = set([token for tokens_this_doc in tokens for token in tokens_this_doc])
-    #print(vocab)
     association_list = build_association(tokens_map, vocab, query)
-    # print(association_list)
     association_list.sort(key = lambda x: x[2],reverse=True)
-    # pprint.pprint(association_list) 
-    i=2;
-    # print(association_list)
+    i=2
     maxy = len(association_list)
     if maxy >=5:
         maxy = 5

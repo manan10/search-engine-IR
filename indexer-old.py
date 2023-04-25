@@ -4,11 +4,12 @@ import pysolr
 import re
 from flask import request, jsonify
 import json
-from query_expansion.expansion import expand_query
+from query_expansion.Association_Cluster import association_main
+from query_expansion.Metric_Clusters import metric_cluster_main
+from query_expansion.Scalar_Clustering import scalar_main
 from spellchecker import SpellChecker
 
 solr = pysolr.Solr('http://localhost:8983/solr/nutch/', always_commit=True)
-
 spell = SpellChecker()
 app = flask.Flask(__name__)
 CORS(app)
@@ -36,21 +37,25 @@ def get_query():
     
     if expansion_method != 'none':
         query = spell.correction(original_query)
-        expanded_query = expand_query(query, solr_results, expansion_method)    
-        solr_res_after_qe = get_results_from_solr(convert_to_solr_query(expanded_query), total_results)
+
+        if expansion_method == 'association':
+            expanded_query = association_main(query, solr_results)    
+        elif expansion_method == 'metric':
+            expanded_query = metric_cluster_main(query, solr_results)
+        else:
+            expanded_query = scalar_main(query, solr_results)
+
+        solr_res_after_qe = get_results_from_solr(expanded_query, 20)
         api_resp = parse_solr_results(solr_res_after_qe)
         result = api_resp
     else:
         expanded_query = query
-
+    
     payload = { "query": expanded_query, "results": result }
-    response = jsonify(payload)
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-    return response
+    return jsonify(payload)
 
 def convert_to_solr_query(query):
-    return 'title:' + query #+ 'OR url:' + query + 
+    return '(title:' + query + 'OR url:' + query + ')'
 
 def get_results_from_solr(query, no_of_results):
     results = solr.search(query, search_handler="/select", **{
@@ -58,6 +63,7 @@ def get_results_from_solr(query, no_of_results):
         "rows": no_of_results
     })
     return results
+
 
 def parse_solr_results(solr_results):
     if solr_results.hits == 0:
@@ -88,13 +94,14 @@ def parse_solr_results(solr_results):
             api_resp.append(link_json)
     return api_resp
 
+
 def get_clustering_results(clust_inp, param_type):
     if param_type == "flat":
-        f = open('clustering/precomputed_clusters/clustering_f.txt')
+        f = open('clustering/precomputed_clustering/clustering_f.txt')
         lines = f.readlines()
         f.close()
     elif param_type == "hierarchical":
-        f = open('clustering/precomputed_clusters/clustering_h8.txt')
+        f = open('clustering/precomputed_clustering/clustering_h.txt')
         lines = f.readlines()
         f.close()
 
@@ -138,6 +145,7 @@ def get_hits_results(clust_inp):
 
     clust_inp = sorted(clust_inp, key=lambda x: authority_score_dict.get(x['url'], 0.0), reverse=True)
     return clust_inp
+
 
 app.run(port='5000')
 
