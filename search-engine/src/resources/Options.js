@@ -5,16 +5,14 @@ const options = {
     ],
 
     cluster: [
-        { label: 'NONE', value: 'none' },
         { label: 'FLAT', value: 'flat' },
         { label: 'HIERARCHICAL', value: 'hierarchical' },
     ],
 
     expansion: [
-        { label: 'NONE', value: 'none' },
-        { label: 'ASSOCIATION', value: 'association' },
-        { label: 'METRIC', value: 'metric' },
-        { label: 'SCALAR', value: 'scalar' },
+        { label: 'ASSOCIATION', value: 'association_qe' },
+        { label: 'METRIC', value: 'metric_qe' },
+        { label: 'SCALAR', value: 'scalar_qe' },
     ],
     engines: [
         { label: 'ALMIGHTY', value: 'almighty' },

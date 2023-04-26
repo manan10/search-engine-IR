@@ -33,29 +33,26 @@ function Result() {
   const [ query, setQuery ] = useState("")
 
   const { value: search, onChange: setSearch, setVal: setValSearch, isValid }  = useInput('', (val) => val !== '')
-  const { value: model, onChange: setModel, setVal: setValModel }  = useInput('pagerank')
-  const { value: cluster, onChange: setCluster, setVal: setValCluster }  = useInput('none')
-  const { value: expansion, onChange: setExpansion, setVal: setValExpansion }  = useInput('none')
+  const { value: mode, onChange: setMode, setVal: setValMode }  = useInput('pagerank')
   
   const onChangeEngine = (value) => changeEngine(value)
   const onLogoClick = () => navigate('/', { replace: true })
   const onSettingsClicked = (event) => setIsModalOpen(true)
   const gotoTop = () => pageRef.current.scrollIntoView()
 
-  const onSubmitQuery = async (valid, query = null) => {
+  const onSubmitQuery = async (valid, query = null, defMode = null) => {
     if (valid) {
       setError(null)
       setIsLoading(true)
       try {
         const queryParams = {
           query: query ? query : search,
-          relevance_model: model,
-          clustering_method: cluster,
-          expansion_method: expansion
+          type: defMode ? defMode : mode,
         }
         const response = await axios.get(api.baseURL + 'indexer', { params: queryParams })
         setResults(response.data.results)
         setQuery(response.data.query)
+        setValSearch(response.data.query)
       } catch(err) {
         setError('Something went wrong')
       } 
@@ -73,18 +70,16 @@ function Result() {
       Input: {
           colorBorder: colors.primaryColor,
           colorPrimaryHover: colors.primaryColor,
-          borderRadius: '0px !mportant'
+          borderRadius: '0px !important'
       } 
   }
 
   useEffect(() => {
-    const { search, model, cluster, expansion } = location.state
+    const { search, mode } = location.state
     setValSearch(search)
-    setValModel(model)
-    setValCluster(cluster)
-    setValExpansion(expansion)
+    setValMode(mode)
     setQuery(search)
-    onSubmitQuery(true, search)
+    onSubmitQuery(true, search, mode)
     // eslint-disable-next-line
   }, [location.state])  
   
@@ -96,8 +91,8 @@ function Result() {
           isModalOpen && createPortal(
             <SettingsModal 
               isModelOpen={isModalOpen} setIsModalOpen={setIsModalOpen} 
-              model={model} cluster={cluster} expansion={expansion} 
-              setModel={setModel} setCluster={setCluster} setExpansion={setExpansion} />
+              mode={mode} 
+              setMode={setMode} />
             , document.getElementById("modal")) 
         }
 
